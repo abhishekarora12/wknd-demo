@@ -3,3 +3,13 @@
     padding: 10px;
     border-collapse: collapse;
 }
+
+.leaderboard table tr:first-child {
+    background: #bbb7b7;
+}
+
+.leaderboard table tr:nth-child(2), 
+.leaderboard table tr:nth-child(3), 
+.leaderboard table tr:nth-child(4) {
+    background: #eeff00;
+}
