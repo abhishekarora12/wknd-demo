@@ -1,17 +1,13 @@
 import { fetchIndex } from '../../scripts/scripts.js';
 
-function parseDateTime(d, t) {
-    var d = new Date(d);
-    var time = t.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-    d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
-    d.setMinutes(parseInt(time[2]) || 0);
-    return d;
-}
-
-function dateTimeSort(a, b) {
-    var c = parseDateTime(a['Date'], a['Time']);
-    var d = parseDateTime(b['Date'], b['Time']);
-    return c-d; 
+function convertToSeconds(t) {
+    var time = t.split(':');
+    var total_sec = 0;
+    if (time.length == 2) {
+        total_sec += parseInt(time[1]); // directly add seconds
+        total_sec += 60 * parseInt(time[0]); // convert minutes to seconds
+    }
+    return total_sec;
 }
 
 /**
@@ -32,7 +28,15 @@ export default async function decorate(block) {
     headerRow.insertCell().textContent = 'URL';
 
     // Sort the rows by time
-   data.sort(dateTimeSort);
+    data.sort((a, b) => {
+        var c = convertToSeconds(a['Time']);
+        console.log("c: ", c);
+        var d = convertToSeconds(b['Time']);
+        console.log("d: ", d);
+        var result = c - d;
+        console.log("result: ", result);
+        return result;
+    });
 
     // Add the rows to the table
     data.forEach(row => {
